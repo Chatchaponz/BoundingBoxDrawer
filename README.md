@@ -1,6 +1,6 @@
 # BoundingBoxDrawer
 
-This code was created to generate `.jpg` images with bounding box(es) (rectangle only) from directory that contains JSON files created by [LabelMe](https://github.com/LabelMe/labelme)
+This code was created to generate `.jpg` images with bounding box(es) (rectangle only) from directory that contains JSON file(s) created by [LabelMe](https://github.com/LabelMe/labelme)
 
 ## Requirements
 - Python 3.7+
