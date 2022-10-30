@@ -67,6 +67,10 @@ def draw_boxes_on_img():
         # get img from encoded data save in JSON
         img_arr = img_b64_to_arr(label_data['imageData'])
 
+        # case image is grayscale (like from .bmp) convert to BGR first
+        if img_arr.ndim == 2:
+            img_arr = cv2.cvtColor(img_arr, cv2.COLOR_GRAY2BGR)
+
         # get all box coordinates
         boxes_coor = get_boxes_coor(label_data["shapes"])
 
