@@ -18,7 +18,7 @@ PATH_TO_SAVE_IMG = "labeled_img/"  # path to save image with bounding box
 
 ##################### Bounding box setting ####################
 BOX_COLOR = (0, 0, 255)  # (B,G,R)
-BOX_THICKNESS = 2  # in pixel
+BOX_THICKNESS = 6  # in pixel
 
 # decode base64 image to numpy array
 def img_b64_to_arr(img_b64: str):
