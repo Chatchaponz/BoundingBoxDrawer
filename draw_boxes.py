@@ -11,10 +11,9 @@ from pathlib import Path
 # This code should work with Labelme JSON output
 
 ####################### General setting #######################
-# ! Path should end with "/" if not empty "" ***
 # this directory must contain json of labelme data (original image is optional)
-PATH_TO_JSONS = "img/"
-PATH_TO_SAVE_IMG = "labeled_img/"  # path to save image with bounding box
+PATH_TO_JSONS = "img"
+PATH_TO_SAVE_IMG = "labeled_img"  # path to save image with bounding box
 
 ##################### Bounding box setting ####################
 BOX_COLOR = (0, 0, 255)  # (B,G,R)
@@ -51,7 +50,7 @@ def draw_boxes(img_arr: np.ndarray, boxes_coor: list):
 
 def draw_boxes_on_img():
     # get all "path" to labelme JSONS files
-    all_files = glob(f"{PATH_TO_JSONS}*.json")
+    all_files = glob(os.path.join( PATH_TO_JSONS, "*.json"))
 
     # create save directory if not exist
     Path(PATH_TO_SAVE_IMG).mkdir(parents=True, exist_ok=True)
@@ -78,7 +77,7 @@ def draw_boxes_on_img():
         image = draw_boxes(img_arr, boxes_coor)
 
         # save image
-        cv2.imwrite(f"{PATH_TO_SAVE_IMG}{file_name}.jpg", image)
+        cv2.imwrite(os.path.join(PATH_TO_SAVE_IMG, f"{file_name}.jpg"), image)
 
 
 if __name__ == "__main__":
