@@ -16,7 +16,7 @@ PATH_TO_JSONS = "img"
 PATH_TO_SAVE_IMG = "labeled_img"  # path to save image with bounding box
 
 ##################### Bounding box setting ####################
-BOX_COLOR = (0, 0, 255)  # (B,G,R)
+BOX_COLOR = (0, 255, 255)  # (B,G,R)
 BOX_THICKNESS = 6  # in pixel
 
 # decode base64 image to numpy array
@@ -29,6 +29,7 @@ def img_b64_to_arr(img_b64: str):
 # get all box coordinates
 def get_boxes_coor(shapes: list):
     boxes = []
+    labels = []
     for box in shapes:
         if box["shape_type"] == "rectangle":
             x_start = round(box["points"][0][0])
@@ -36,17 +37,17 @@ def get_boxes_coor(shapes: list):
             x_end = round(box["points"][1][0])
             y_end = round(box["points"][1][1])
             boxes.append([(x_start, y_start), (x_end, y_end)])
-    return boxes
+            labels.append(box["label"])
+    return boxes, labels
 
 # draw all boxes on image (numpy array)
-def draw_boxes(img_arr: np.ndarray, boxes_coor: list):
+def draw_boxes(img_arr: np.ndarray, boxes_coor: list, labels: list):
     image_rect = img_arr
-    for box_coor in boxes_coor:
+    for idx, box_coor in enumerate(boxes_coor):
         image_rect = cv2.rectangle(
             image_rect, box_coor[0], box_coor[1], BOX_COLOR, BOX_THICKNESS)
-
+        cv2.putText(image_rect, labels[idx], (box_coor[0][0], box_coor[0][1]-30), cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=3, color=BOX_COLOR)
     return image_rect
-
 
 def draw_boxes_on_img():
     # get all "path" to labelme JSONS files
@@ -71,10 +72,10 @@ def draw_boxes_on_img():
             img_arr = cv2.cvtColor(img_arr, cv2.COLOR_GRAY2BGR)
 
         # get all box coordinates
-        boxes_coor = get_boxes_coor(label_data["shapes"])
+        boxes_coor, labels = get_boxes_coor(label_data["shapes"])
 
         # draw boxes on image
-        image = draw_boxes(img_arr, boxes_coor)
+        image = draw_boxes(img_arr, boxes_coor, labels)
 
         # save image
         cv2.imwrite(os.path.join(PATH_TO_SAVE_IMG, f"{file_name}.jpg"), image)
